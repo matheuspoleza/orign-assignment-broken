@@ -1,4 +1,4 @@
-import { convert, filter } from "./vinService"
+import { convert, validate, filter } from "./vinService"
 import { vinCheckResponseFixture, vinResultEntryFixture } from "../test/fixtures"
 
 describe("Vin Service", () => {
@@ -44,6 +44,14 @@ describe("Vin Service", () => {
                 vechicleType: "CAR",
                 trim: "RX8"
             }))
+    })
+
+    describe("Vin validation", () => {
+        it("returns null when vin has 17 chars", () => expect(validate("SHHFN23607U002758")).toBeNull())
+        it("returns invalid length error when vin has less than 17 chars", () =>
+            expect(validate("SHHFN23607U00275")).toEqual("17 chars expected"))
+        it("returns invalid length error when vi has more than 17 chars", () =>
+            expect(validate("SHHFN23607U0027589")).toEqual("17 chars expected"))
     })
 
     describe("Vin string filter", () => {
