@@ -1,30 +1,30 @@
 import { convert, validate, filter } from "./vinService"
 import { vinCheckResponseFixture, vinResultEntryFixture } from "../test/fixtures"
 
+const entry = (Variable: string, Value: string) => vinResultEntryFixture({ Variable, Value })
+
 describe("Vin Service", () => {
-    describe.skip("Response converter", () => {
-        it("gives empty result when no data is given", () => expect(convert(null)).toEqual(null))
-        it("gives empty result when invalid data is given", () => expect(convert({} as any)).toEqual(null))
-        it("gives empty result when response contains no data", () =>
+    describe("when converting vin", () => {
+        it("returns null when no data is given", () => expect(convert(null)).toEqual(null))
+        it("returns null when invalid data is given", () => expect(convert({} as any)).toEqual(null))
+        it("returns null when response contains no data", () =>
             expect(convert(vinCheckResponseFixture({ Results: [] }))).toEqual(null))
 
-        const entry = (Variable: string, Value: string) => vinResultEntryFixture({ Variable, Value })
-
-        it("takes make from Results array", () =>
+        it("takes make from results array", () =>
             expect(convert(vinCheckResponseFixture({ Results: [entry("Make", "HONDA")] })).make).toEqual("HONDA"))
 
-        it("takes year from Results array", () =>
+        it("takes year from results array", () =>
             expect(convert(vinCheckResponseFixture({ Results: [entry("Model Year", "2007")] })).year).toEqual(2007))
 
-        it("takes type from Results array", () =>
+        it("takes type from results array", () =>
             expect(
                 convert(vinCheckResponseFixture({ Results: [entry("Vehicle Type", "PASSENGER CAR")] })).vechicleType
             ).toEqual("PASSENGER CAR"))
 
-        it("takes trim from Results array", () =>
+        it("takes trim from results array", () =>
             expect(convert(vinCheckResponseFixture({ Results: [entry("Trim", "FN2")] })).trim).toEqual("FN2"))
 
-        it("takes all values from Results", () =>
+        it("takes all values from results", () =>
             expect(
                 convert(
                     vinCheckResponseFixture({
@@ -46,7 +46,7 @@ describe("Vin Service", () => {
             }))
     })
 
-    describe("Vin validation", () => {
+    describe("when validating vin", () => {
         it("returns null when vin has 17 chars", () => expect(validate("SHHFN23607U002758")).toBeNull())
         it("returns invalid length error when vin has less than 17 chars", () =>
             expect(validate("SHHFN23607U00275")).toEqual("17 chars expected"))
@@ -54,7 +54,7 @@ describe("Vin Service", () => {
             expect(validate("SHHFN23607U0027589")).toEqual("17 chars expected"))
     })
 
-    describe("Vin string filter", () => {
+    describe("when filtering vin", () => {
         it("uppercases given string", () => expect(filter("abc")).toEqual("ABC"))
         it("disallows IOQ", () => expect(filter("IOQabc")).toEqual("ABC"))
         it("disallows ioq", () => expect(filter("ioqabc")).toEqual("ABC"))
