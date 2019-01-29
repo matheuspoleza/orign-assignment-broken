@@ -47,7 +47,7 @@ export const convert = (_res: VinCheckResponse): CarInfo => {
 
 export const apiCheck = async (_vin: string, getRequest: any = get): Promise<CarInfo> => {
     return new Promise<CarInfo>((resolve, reject) => {
-        getRequest(`${VIN_API}/vehiasdles/decodevin/${_vin}?format=json`)
+        getRequest(`${VIN_API}/vehicles/decodevin/${_vin}?format=json`)
             .then((res: VinCheckResponse): void => {
                 const carInfo = convert(res)
                 resolve(carInfo)

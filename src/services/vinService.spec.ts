@@ -52,7 +52,7 @@ describe("Vin Service", () => {
             const vin = "SHHFN23607U002758"
             const response = vinCheckResponseFixture({
                 Results: [
-                    entry("Make", "MAZDA"),
+                    entry("Make", "HONDA"),
                     entry("Model Year", "2017"),
                     entry("Model", "City"),
                     entry("Vehicle Type", "Car"),
@@ -113,7 +113,7 @@ describe("Vin Service", () => {
             ).rejects.toEqual(new Error("Something unexpected happened. Please try again later."))
         })
 
-        it.only("throws default error message for unmapped error", async () => {
+        it("throws default error message for unmapped error", async () => {
             const vin = "SHHFN23607U002758"
 
             expect(
