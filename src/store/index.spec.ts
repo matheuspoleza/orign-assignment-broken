@@ -1,7 +1,17 @@
-import { reducer, initialState, setVin, checkVin, checkVinSuccess } from "."
+import { reducer, initialState, setVin, checkVin, checkVinSuccess, checkVinFail } from "."
 
 describe("Vin state", () => {
     describe("reducer", () => {
+        describe("when sending check vin fail action", () => {
+            it("returns check result as not loaded", () => {
+                const action = { type: checkVinFail, payload: new Error("error message") }
+
+                const result = reducer(initialState, action)
+
+                expect(result).toEqual({ ...initialState, vinCheckResult: "NotLoaded" })
+            })
+        })
+
         describe("when sending check vin success action", () => {
             it("returns check vin result from payload", () => {
                 const vinApiResult: CarInfo = { make: null, model: null, year: null, trim: null, vechicleType: null }
