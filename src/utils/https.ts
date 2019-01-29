@@ -4,7 +4,7 @@ export const put = <T>(url: string, data: any) => request<T>(url, data, null, "P
 
 export const errors = {
     serverError: "serverError",
-    unprocessableEnity: "unprocessableEntity",
+    unprocessableEntity: "unprocessableEntity",
     unprocessableResponse: "unprocessableResponse"
 }
 
@@ -29,7 +29,7 @@ export const request = <T>(url: string, data: any = null, bearer: string = null,
                 const res: T = JSON.parse(client.responseText)
 
                 if (client.status === 422) {
-                    reject(httpsError("unprocessableEnity", ""))
+                    reject(httpsError("unprocessableEntity", ""))
                 }
                 if (client.status >= 300) {
                     reject(httpsError("serverError", `Bad status: ${url} -> ${client.status} (${client.responseText})`))
