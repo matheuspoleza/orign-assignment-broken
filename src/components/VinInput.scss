@@ -17,6 +17,13 @@ $color: #ff9393;
         font-weight: 600;
         padding: 10px;
     }
+
+    &--invalid {
+      input {
+        border: 1px solid $color;
+      }
+    }
+        
     &__Error {
         color: $color;
         font-size: 15px;
