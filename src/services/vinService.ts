@@ -1,8 +1,16 @@
-// import { get } from "../utils/https"
+import { errors, get } from "../utils/https"
 
 const invalidCharsRegex = new RegExp(/[IOQ]/, "g")
 const VIN_LENGTH = 17
 const INVALID_LENGTH_ERROR_MESSAGE = `${VIN_LENGTH} chars expected`
+const VIN_API = "https://vpic.nhtsa.dot.gov/api"
+const DEFAULT_ERROR_MESSAGE = "Something unexpected happened. Please try again later."
+
+const errorMessage = {
+    [errors.serverError]: "Error conecting to our services. Please try again later.",
+    [errors.unprocessableEntity]: "Validation error. Please verify your Vin Number.",
+    [errors.unprocessableResponse]: DEFAULT_ERROR_MESSAGE
+}
 
 export const filter = (vin: string) => {
     return vin
@@ -37,4 +45,16 @@ export const convert = (_res: VinCheckResponse): CarInfo => {
         .reduce((newCarInfo, result) => ({ ...newCarInfo, ...result }), carInfo)
 }
 
-export const apiCheck = async (_vin: string): Promise<CarInfo> => null
+export const apiCheck = async (_vin: string, getRequest: any = get): Promise<CarInfo> => {
+    return new Promise<CarInfo>((resolve, reject) => {
+        getRequest(`${VIN_API}/vehiasdles/decodevin/${_vin}?format=json`)
+            .then((res: VinCheckResponse): void => {
+                const carInfo = convert(res)
+                resolve(carInfo)
+            })
+            .catch((err: Error) => {
+                const message = errorMessage[err.name] ? errorMessage[err.name] : DEFAULT_ERROR_MESSAGE
+                reject(new Error(message))
+            })
+    })
+}
